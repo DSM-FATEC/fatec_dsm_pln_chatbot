@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>CHAT</h1>
+
+    <div id="feedChat"></div>
+
+    <form id="formChat">
+        <input id="inputChat" placeholder="...">
+
+        <button type="submit">
+            Enviar
+        </button>
+    </form>
+
+    <script>
+        // document.getElementById -> Obtém elemento pelo seu id
+        const form = document.getElementById("formChat");
+
+        // form.onsubmit(..) -> Registra uma função para rodar no lugar do evento
+        form.addEventListener('submit', async (e) => {
+            // <evento>.preventDefault() -> Evita comportamento padrão (ex: recarregar página)
+            e.preventDefault()
+
+            const input = document.getElementById("inputChat");
+
+            // <elemento>.value -> Obtém o valor de um elemento
+            const mensagem = input.value;
+
+            // TODO -> Chamar api com valor da input
+            const feed = document.getElementById("feedChat");
+
+            // <elemento>.innerHTML -> Acessa o HTML do elemento
+            feed.innerHTML = feed.innerHTML + `
+                <div>
+                    <span>Você: ${mensagem}</span>
+                </div>
+            `;
+
+            // fetch(...) -> Faz uma requisição HTTP para uma API
+            const resultadoApi = await fetch('https://httpbin.org/get');
+
+            // JSON.stringify -> Transforma um obeto javascript em texto
+            feed.innerHTML = feed.innerHTML + `
+                <div>
+                    <span>Chat: ${JSON.stringify(resultadoApi)}</span>
+                </div>
+            `
+        });
+    </script>
+</body>
+</html>
+
