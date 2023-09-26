@@ -24,7 +24,7 @@ def get_answer_index(preprocessed_sentences, preprocessed_message, threshold = 0
     similarity_score = similarity[0][similarity_index]
 
     if similarity_score < threshold:
-        return 'sorry, no answer was found'
+        return None 
 
     # Acessa a lista de sentenças originais
     return similarity_index

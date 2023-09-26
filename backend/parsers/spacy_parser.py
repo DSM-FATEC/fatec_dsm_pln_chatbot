@@ -13,8 +13,15 @@ def token_is_valid(token):
 
 def clean_text(sentence):
     nlp = spacy.load('pt_core_news_sm')
-    sentence_lower = sentence.lower()
+    
+    doc = nlp(sentence.lower())
+    tokens = []
+    size = len(doc)
 
-    tokens = [token.text for token in nlp(sentence_lower) if token_is_valid(token)]
+    for i, token in enumerate(doc):
+        print(f'Cleaning token {i} of {size}')
+
+        if token_is_valid(token):
+            tokens.append(token.text)
 
     return ' '.join(tokens)
