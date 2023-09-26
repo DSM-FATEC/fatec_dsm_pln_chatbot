@@ -1,4 +1,7 @@
+from os import getenv
+
 from fastapi import FastAPI
+from uvicorn import run
 from nltk import sent_tokenize, download
 
 from extractors.wikipedia_extractor import extract_cats
@@ -10,6 +13,8 @@ from responders.chatbot import get_answer_index
 # Instanciando o FastAPI
 app = FastAPI()
 
+# Instala dependências do NLTK
+download('punkt')
 
 # Extraindo texto bruto da wikipedia
 cats_article = extract_cats()
@@ -31,4 +36,13 @@ async def answer_msg(body: MessageModel) -> str:
     if index is None:
         return "Desculpe, não consegui pensar em nenhuma resposta"
 
-    return cats_article_tokens[index]
+    try:
+        return cats_article_tokens[index]
+    except:
+        return "Desculpe, não consegui pensar em nenhuma resposta"
+
+
+if __name__ == '__main__':
+    port = int(getenv('PORT', 8000))
+
+    run(app='main:app', host='0.0.0.0', port=port)
