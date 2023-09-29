@@ -2,6 +2,7 @@ from pickle import dump, load
 from os import getenv, path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 from nltk import sent_tokenize, download
 
@@ -17,6 +18,13 @@ TOKENS_PICKLE = 'datasources/tokens.pickle'
 # Instanciando o FastAPI
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def extract_data_to_pickle() -> None:
     cats_article = extract_cats()
@@ -51,7 +59,7 @@ def load_data_from_pickle():
 def answer_msg(body: MessageModel) -> str:
     # Preprocessando mensagem
     preprocessed_message = clean_text(body.message)
-    
+
     sentences, tokens = load_data_from_pickle()
 
     index = get_answer_index(preprocessed_sentences=sentences,
@@ -73,5 +81,5 @@ if __name__ == '__main__':
         extract_data_to_pickle()
 
     port = int(getenv('PORT', 8000))
-    
+
     run(app='main:app', host='0.0.0.0', port=port)
