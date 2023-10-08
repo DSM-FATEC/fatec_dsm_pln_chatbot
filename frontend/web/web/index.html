@@ -24,6 +24,10 @@
     // Função para adicionar uma mensagem ao feedChat
     function adicionarMensagem(mensagem, deQuem) {
         const feed = document.getElementById("feedChat");
+
+        mensagem = mensagem.replaceAll('\\n', "");
+        mensagem = mensagem.replace(/\[\d+\]/, "");
+
         feed.innerHTML += `
             <div>
                 <span>${deQuem}: ${mensagem}</span>
@@ -51,7 +55,7 @@
 
     try {
         // fetch(...)-> Faz uma requisição HTTP para uma API
-        const response = await fetch("https://pln-chatbot-api-gxajrk6c6q-rj.a.run.app/msg", {
+        const response = await fetch("http://127.0.0.1:8000/msg", {
             method: "POST",
             headers: {
                 'Accept': 'application/json',

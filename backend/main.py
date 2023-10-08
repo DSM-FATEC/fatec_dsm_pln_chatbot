@@ -1,5 +1,6 @@
 from pickle import dump, load
 from os import getenv, path
+from collections import Counter
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,6 +62,13 @@ def answer_msg(body: MessageModel) -> str:
     preprocessed_message = clean_text(body.message)
 
     sentences, tokens = load_data_from_pickle()
+
+    if body.message in ('oi', 'olá', 'salve', 'salve meu bom, suave?'):
+        word_freq = Counter(sentences)
+        wordcloud_data = [word for word, _ in word_freq.items()]
+        text = ', '.join(wordcloud_data[:1])
+
+        return f'Olá! Como posso sanar suas dúvidas sobre gatos hoje? Algumas palavras que podem ser usadas: {text}'
 
     index = get_answer_index(preprocessed_sentences=sentences,
                              preprocessed_message=preprocessed_message)
